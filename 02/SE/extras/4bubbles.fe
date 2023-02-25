@@ -1,0 +1,67 @@
+//4bubbles.fe
+
+
+parameter Temperatura = 293      // K
+parameter R_gaz = 8.31           // J/(mol*K)
+parameter cisnienie = 10       // Pa
+parameter powiekszenie = 1e-3    // m
+parameter objetosc1 = Temperatura*R_gaz/cisnienie*powiekszenie^3
+parameter filmA = 2*0.013        // N/m
+//PRESSURE cisnienie
+               
+
+vertices
+1   0   0       0         
+2 -3*powiekszenie -1.2249*powiekszenie 1.7322*powiekszenie
+3 3*powiekszenie  -1.2249*powiekszenie 1.7322*powiekszenie
+4   0   3.6742*powiekszenie  0
+5   0  -1.2249*powiekszenie -3.4640*powiekszenie
+
+  
+
+edges
+1   1  2
+2   1  3
+3   1  4
+4   1  5
+5   2  4
+6   3  4
+7   5  4
+8   2  3
+9   3  5
+10  5  2
+
+faces
+1  1  5  -3  tension filmA
+2  2  6  -3  tension filmA
+3  4  7  -3  tension filmA
+4  2 -8  -1  tension filmA
+5  4 -9  -2  tension filmA
+6  1 -10 -4  tension filmA
+7  5 -6  -8  tension filmA
+8  6 -7  -9  tension filmA
+9  7 -5  -10 tension filmA
+10 8  9   10 tension filmA
+
+bodies
+1   1   4  -2  -7 volume objetosc1
+2  -8   5   2  -3 volume objetosc1
+3   6   3  -1  -9 volume objetosc1
+4  -10 -4  -5  -6 volume objetosc1
+
+read
+s
+q
+set facet opacity 0.3
+//ambient_pressure;
+ambient_pressure_value:= cisnienie;
+gogo:={r; g100; o; V; u; g100};
+gogo 4
+
+read "obliczenia.cmd";
+
+
+
+
+
+     

@@ -1,0 +1,9 @@
+
+
+formula: z=0.1*(cos(x*3)+sin(y*3))
+
+
+
+
+gogo:= {r; V 10; u 10; g10; V 10; u 10; g10; V 10; u 10; g10;};
+gogo 3

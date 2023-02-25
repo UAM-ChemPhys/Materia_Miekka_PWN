@@ -1,0 +1,103 @@
+//kelvin.fe
+
+TORUS_FILLED
+
+space_dimension 3
+
+periods
+1 0 0
+0 1 0
+0 0 1
+
+vertices
+1  0.50 0.00 0.75
+2  0.25 0.00 0.50
+3  0.00 0.25 0.50
+4  0.75 0.00 0.50
+5  0.00 0.50 0.75
+6  0.50 0.00 0.25
+7  0.00 0.75 0.50
+8  0.50 0.25 0.00
+9  0.25 0.50 0.00
+10 0.00 0.50 0.25
+11 0.50 0.75 0.00
+12 0.75 0.50 0.00
+
+edges  
+1     1  2 * * *
+2     2  3 * * *
+3     1  4 * * *
+4     3  5 * * *
+5     2  6 * * *
+6     2  7 * - *
+7     1  8 * * +
+8     4  6 * * *
+9     5  9 * * +
+10    3 10 * * *
+11    3  4 - * *
+12    6  8 * * *
+13    6 11 * - *
+14    7  4 -+*
+15    8 12 * * *
+16    9  8 * * *
+17    9 11 * * *
+18   10  7 * * *
+19   11  1 * + -
+20   12  5 + * -
+21    5  7 * * *
+22   11 12 * * *
+23   10 12 - * *
+24    9 10 * * *
+
+faces
+1      1   2   4   9  16  -7 color 1 backcolor 4
+2     -2   5  12 -16  24 -10 color 8 backcolor 4
+3     -4  10  18 -21         color 5 backcolor 1
+4      7  15  20  -4  11  -3 color 3 backcolor 1
+5     -1   3   8  -5         color 5 backcolor 1
+6      6  14 -11  -2         color 8 backcolor 1
+7      5  13 -17  24  18  -6 color 2 backcolor 8
+8    -12  13  19   7         color 8 backcolor 5
+9    -16  17  22 -15         color 5 backcolor 4
+10   -10  11   8  12  15 -23 color 5 backcolor 3
+11   -21   9  17  19   1   6 color 5 backcolor 8
+12   -14 -18  23 -22 -13  -8 color 6 backcolor 1
+13   -24  -9 -20 -23         color 1 backcolor 8
+14   -19  22  20  21  14  -3 color 1 backcolor 7
+
+bodies
+1    -1 -2 -3 -4  -5   9   7  11 -9 10  12 5 14  3 volume 0.60
+2     2 -6 -7  8 -10 -12 -11 -13  1 13 -14 6  4 -8 volume 0.40
+
+read
+show
+e
+q
+connected_cells;
+wsp_dyfuzji:=1;
+krok:=0.001;
+ii:=0;
+nazwa_pliku:="wyniki_Kelvin.txt"
+gini  := { g 5; hessian; r; g 5; hessian;}
+gstep := { V; g 5; 
+           diffusion_coeff:= wsp_dyfuzji *0.5  
+             /body[1].volume;
+           m krok * wsp_dyfuzji *0.5/body[1].volume;
+           ii:=ii+1;
+           printf "%g,  %f\n",ii,body[1].volume >> nazwa_pliku;}
+set body target 0.5
+set facet opacity 0.3
+//  
+//  dodaj instrukcjê lub 
+//  sekwencje instrukcji zmieniaj¹cych 
+//  napiêcie powierzchniowe wszystkich powierzchni
+//
+gini;
+diffusion_coeff:= wsp_dyfuzji; 
+m krok;
+printf "" >>> nazwa_pliku
+gstep 1000;
+  
+
+
+

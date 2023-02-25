@@ -1,0 +1,149 @@
+//droplet.fe
+
+parameter gravity1=9.81
+parameter gammaL=72750
+parameter gammaS=100000
+parameter thetaini=150
+parameter volume1=20e-6
+parameter gammaSL=gammaS-gammaL*cos(thetaini*pi/180);
+
+parameter Ed1=volume1^(1/3)
+parameter Ed2=Ed1*2
+gravity_constant 1000
+constraint 1   
+formula: x3 = 0.0
+
+Vertices
+1  -Ed1 -Ed1  0.0  constraint 1
+2   Ed1 -Ed1  0.0  constraint 1
+3   Ed1  Ed1  0.0  constraint 1
+4  -Ed1  Ed1  0.0  constraint 1
+5  -Ed1 -Ed1  Ed1
+6   Ed1 -Ed1  Ed1
+7   Ed1  Ed1  Ed1
+8  -Ed1  Ed1  Ed1
+9   0.0  0.0  0.0  
+10 -Ed2 -Ed2  0  fixed
+11  Ed2 -Ed2  0  fixed
+12  Ed2  Ed2  0  fixed
+13 -Ed2  Ed2  0  fixed
+
+edges
+1   1   5
+2   2   6
+3   3   7
+4   4   8
+5   5   6
+6   6   7
+7   7   8
+8   8   5
+9   1   2  constraint 1
+10  2   3  constraint 1
+11  3   4  constraint 1
+12  4   1  constraint 1
+13  1   9  constraint 1
+14  2   9  constraint 1
+15  3   9  constraint 1
+16  4   9  constraint 1
+17  10  11 fixed
+18  11  12 fixed
+19  12  13 fixed
+20  13  10 fixed
+21  1   10 constraint 1
+22  2   11 constraint 1
+23  3   12 constraint 1
+24  4   13 constraint 1
+
+faces
+1   1   5  -2  -9  tension gammaL color 3
+2   2   6  -3  -10 tension gammaL color 3
+3   3   7  -4  -11 tension gammaL color 3
+4   4   8  -1  -12 tension gammaL color 3
+5   5   6   7   8  tension gammaL color 3
+6   9   14 -13  constraint 1 tension gammaSL color -1
+7   10  15 -14  constraint 1 tension gammaSL color -1
+8   11  16 -15  constraint 1 tension gammaSL color -1
+9   12  13 -16  constraint 1 tension gammaSL color -1
+10  17  -22  -9   21 constraint 1 tension gammaS 
+11  18  -23  -10  22 constraint 1 tension gammaS
+12  19  -24  -11  23 constraint 1 tension gammaS 
+13  20  -21  -12  24 constraint 1 tension gammaS
+bodies
+1  5 -1 -2 -3 -4 -13 -12 -11 -10 volume volume1 density 1
+
+read
+quiet
+s
+5d
+3r
+q
+g100
+r
+u 100
+V 100
+g100
+r
+g100
+u 100
+V 100
+g100
+u 100
+V 100
+e 100
+g100
+u 100
+V 100
+g100
+//a
+
+//hessian
+
+print "";
+print "Initial shape of the droplet has been reached";
+
+ii:=0;
+//***************************************************************************************
+NN:=1000;   //precision parameter
+theta1:=30;
+density1:=1;
+time_step:=0.00000003;
+//***************************************************************************************
+
+fname:="results.txt";
+
+calc:={ foreach vertex v1 where v1.original==1 do 
+      {xxmin:=v1.x;yymin:=v1.y;};
+      diameter:=2*sqrt(xxmin*xxmin+yymin*yymin);}
+process:={ g NN;  
+         u 10; V 10;  g10;
+         ii:=ii+1;  
+         calc; 
+         printf "%g       %g\n",ii*time_step*NN,diameter*1000;
+         printf "%g %g\n",ii*time_step*NN,diameter >> fname}
+
+
+theta:=theta1*pi/180;
+gammaSL1:=gammaS-gammaL*cos(theta);
+foreach facet f1 where f1.tension==gammaSL do set f1.tension gammaSL1
+set body[1].density density1
+m time_step
+
+print "";
+printf "Old conract angle = %g, old gammaSL = %g,  new gammaSL = %g\n",thetaini,gammaSL/1000,gammasl1/1000;
+print "========================================================================";
+printf "Gravity         = %g\n",gravity1;
+printf "Surface tension = %g\n",gammaL/1000;
+printf "Contact angle   = %g\n",theta1;
+printf "Time step       = %g\n",time_step*100;
+printf "Droplet volume  = %g\n",volume1;
+printf "Droplet density = %g\n",density1;
+print "========================================================================";
+print "Press [Enter]";
+pause
+
+
+calc;
+printf "%g       %g\n",ii*time_step*NN,diameter*1000;
+printf "%g %g\n",ii*time_step,diameter >>> fname 
+process 100
+print "Job has been done";
