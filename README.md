@@ -16,6 +16,6 @@ następujących programów:
 W trakcie stosowania skryptów Pyhona zawarych w książce konieczne będzie zainstalowanie dodatkowych
 bibliotek Pythona. Należy do zrobić stosując standardowe polecenie: pip install nazwa_pakietu.
 
-Program Surface Evelver jest gotowy do użytku po skopiowaniu go na dysk. Jednakże do edycji jego
+Program Surface Evolver jest gotowy do użytku po skopiowaniu go na dysk. Jednakże do edycji jego
 skryptów wskazane jest użycie edytora NotePad++ wraz z zawartym w repozytorium plikiem userDefineLang.xml,
 który należy zaistalować zgodnie z instrukcją obsługi edytora.
