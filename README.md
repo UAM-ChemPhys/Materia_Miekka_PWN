@@ -1,5 +1,5 @@
 # Wstęp do materii miękkiej z ćwiczeniami
-## Marta Waligórska, Waldemar Nowicki
+## Marta Waligórska, [Waldemar Nowicki](http://gwnow.home.amu.edu.pl/)
 PWN 2023
 
 Materiały do podręcznika 
